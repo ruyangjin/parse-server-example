@@ -22,9 +22,9 @@ var api = new ParseServer({
     classNames: ["Posts", "Comments"] // List of classes to support for query subscriptions
   },
   filesAdapter: new S3Adapter(
-    process.env.AWS_ACCESS_KEY_ID || "AKIAJUSZVGOUU2ZRMNIQ",
-    process.env.AWS_SECRET_ACCESS_KEY || "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",
-    process.env.BUCKET_NAME || "runfitdevelopment",
+    process.env.AWS_ACCESS_KEY_ID || "",
+    process.env.AWS_SECRET_ACCESS_KEY || "",
+    process.env.BUCKET_NAME || "",
     {directAccess: true}
   )
 });
