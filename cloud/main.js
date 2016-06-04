@@ -10,10 +10,12 @@ Parse.Cloud.define('hello', function(req, res) {
 Parse.Cloud.define('forgotPassword', function (req,res) {
   var query = new Parse.Query('AppUser');
   query.equalTo("email",req.params.email);
+  console.log("#forgotPassword","#request",req.params);
   query.find({
     success: function(results) {
+      console.log("#forgotPassword","#found.user",results);
       if (results.length == 0) {
-        res.error("no user is found");
+        return res.error("no user is found");
       }
       else if (results.length == 1) {
         var user = results[0]; // type: PFObject
@@ -35,12 +37,14 @@ Parse.Cloud.define('forgotPassword', function (req,res) {
           text    : text,
           html    : htmlString
         };
+        console.log("#forgotPassword","#send.before",payload);
         sendgrid.send(payload, function(err, json) {
+          console.log()
           if(err) {
-            res.error(err);
+            return res.error(err);
           }
           else {
-            res.success(json);
+            return res.success(json);
           }
         });
         //helper.sendEmail(user.get("email"),process.env.FORGOTPASSWORD_FROM,process.env.FORGOTPASSWORD_SUBJECT,'Your password is "'+password+"'",htmlString,function(error,result){
@@ -53,11 +57,12 @@ Parse.Cloud.define('forgotPassword', function (req,res) {
         //});
       }
       else {
-        res.error("more than one user is found");
+        return res.error("more than one user is found");
       }
     },
     error:function(error) {
-      res.error(error);
+      console.log("#forgotPassword","#finduser.error",error);
+      return res.error(error);
     }
   });
 });
@@ -68,17 +73,17 @@ Parse.Cloud.define('finduser',function(req,res) {
   query.find({
     success: function(results) {
       if (results.length == 0) {
-        res.error("no user is found");
+        return res.error("no user is found");
       }
       else if (results.length == 1) {
-        res.success(results[0]);
+        return res.success(results[0]);
       }
       else {
-        res.error("more than one user is found");
+        return res.error("more than one user is found");
       }
     },
     error:function(error) {
-      res.error(error);
+      return res.error(error);
     }
   });
 });
