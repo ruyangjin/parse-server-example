@@ -2,6 +2,15 @@ var helper = require('./helper.js');
 function encodeHTML(str) {
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
+function randomString(length, chars) {
+  var result = '';
+  for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+  return result;
+}
+
+function randomToken() {
+  return randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+}
 
 Parse.Cloud.define('hello', function(req, res) {
   res.success('Hi');
@@ -10,7 +19,7 @@ Parse.Cloud.define('hello', function(req, res) {
 Parse.Cloud.define('forgotPassword', function (req,res) {
   var query = new Parse.Query('AppUser');
   query.equalTo("email",req.params.email);
-  var logToken = randomHexString(10);
+  var logToken = randomToken();
   console.log(logToken,"#forgotPassword","#request",req.params);
   query.find({
     success: function(results) {
