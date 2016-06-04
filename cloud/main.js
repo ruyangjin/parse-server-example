@@ -10,10 +10,11 @@ Parse.Cloud.define('hello', function(req, res) {
 Parse.Cloud.define('forgotPassword', function (req,res) {
   var query = new Parse.Query('AppUser');
   query.equalTo("email",req.params.email);
-  console.log("#forgotPassword","#request",req.params);
+  var logToken = randomHexString(10);
+  console.log(logToken,"#forgotPassword","#request",req.params);
   query.find({
     success: function(results) {
-      console.log("#forgotPassword","#found.user",results);
+      console.log(logToken,"#forgotPassword","#found.user",results);
       if (results.length == 0) {
         return res.error("no user is found");
       }
@@ -37,9 +38,9 @@ Parse.Cloud.define('forgotPassword', function (req,res) {
           text    : text,
           html    : htmlString
         };
-        console.log("#forgotPassword","#send.before",payload);
+        console.log(logToken,"#forgotPassword","#send.before",payload);
         sendgrid.send(payload, function(err, json) {
-          console.log()
+          console.log(logToken,"#forgotPassword","#send.after",err,json);
           if(err) {
             return res.error(err);
           }
@@ -61,7 +62,7 @@ Parse.Cloud.define('forgotPassword', function (req,res) {
       }
     },
     error:function(error) {
-      console.log("#forgotPassword","#finduser.error",error);
+      console.log(logToken,"#forgotPassword","#finduser.error",error);
       return res.error(error);
     }
   });
