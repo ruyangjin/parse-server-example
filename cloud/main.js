@@ -17,6 +17,7 @@ Parse.Cloud.define('hello', function(req, res) {
 });
 
 Parse.Cloud.define('forgotPassword', function (req,res) {
+  Parse.Cloud.useMasterKey();
   var query = new Parse.Query('AppUser');
   query.equalTo("email",req.params.email);
   var logToken = randomToken();
@@ -78,6 +79,7 @@ Parse.Cloud.define('forgotPassword', function (req,res) {
 });
 
 Parse.Cloud.define('finduser',function(req,res) {
+  Parse.Cloud.useMasterKey();
   var query = new Parse.Query('AppUser');
   query.equalTo("email",req.params.email);
   query.find({
